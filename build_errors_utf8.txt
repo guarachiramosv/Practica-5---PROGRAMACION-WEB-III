@@ -1,0 +1,21 @@
+﻿  Determinando los proyectos que se van a restaurar...
+  Todos los proyectos est├ín actualizados para la restauraci├│n.
+C:\Users\001\Downloads\practica5PR\Areas\Identity\Pages\Account\Register.cshtml.cs(77,57): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\Areas\Identity\Pages\Account\Register.cshtml.cs(83,73): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(113,71): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(116,73): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(119,8): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+
+ERROR al compilar.
+
+C:\Users\001\Downloads\practica5PR\Areas\Identity\Pages\Account\Register.cshtml.cs(77,57): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\Areas\Identity\Pages\Account\Register.cshtml.cs(83,73): warning CS8625: No se puede convertir un literal NULL en un tipo de referencia que no acepta valores NULL. [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(113,71): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(116,73): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+C:\Users\001\Downloads\practica5PR\obj\Debug\net9.0\Microsoft.CodeAnalysis.Razor.Compiler\Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator\Areas_Identity_Pages_Account_Register_cshtml.g.cs(119,8): error CS0246: El nombre del tipo o del espacio de nombres 'RegisterModel' no se encontr├│ (┬┐falta una directiva using o una referencia de ensamblado?) [C:\Users\001\Downloads\practica5PR\practica5web.csproj]
+    2 Advertencia(s)
+    3 Errores
+
+Tiempo transcurrido 00:00:00.91
+
+Hay actualizaciones de carga de trabajo disponibles. Ejecute "dotnet workload list" para obtener m├ís informaci├│n.
