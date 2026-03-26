@@ -1,6 +1,9 @@
-﻿namespace practica5web.Services.Interfaces
+﻿using practica5PR.Models.ViewModels;
+
+namespace practica5PR.Services.Interfaces
 {
-    public class IDashboardService
+    public interface IDashboardService
     {
+        Task<DashboardViewModel> ObtenerResumenAsync();
     }
 }
