@@ -26,18 +26,21 @@ namespace practica5web.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -57,9 +60,9 @@ namespace practica5web.Areas.Identity.Pages.Account
             [Display(Name = "Apellido")]
             public string Apellido { get; set; }
 
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
+            [Required(ErrorMessage = "El email es obligatorio.")]
+            [EmailAddress(ErrorMessage = "Formato de email inválido.")]
+            [Display(Name = "Correo Electrónico")]
             public string Email { get; set; }
 
             [Required]
@@ -72,6 +75,10 @@ namespace practica5web.Areas.Identity.Pages.Account
             [Display(Name = "Confirmar contraseña")]
             [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "Debes seleccionar un rol.")]
+            [Display(Name = "Rol del Sistema")]
+            public string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -93,13 +100,31 @@ namespace practica5web.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Usuario creó una nueva cuenta con contraseña.");
 
-                    await _userManager.AddToRoleAsync(user, "Cliente");
+                    // Asignar rol seleccionado
+                    if (_userManager.SupportsUserRole)
+                    {
+                        string selectedRole = Input.Role;
+                        // Validar que el rol exista
+                        if (!await _roleManager.RoleExistsAsync(selectedRole))
+                        {
+                            selectedRole = "Cliente"; // Fallback seguro
+                        }
+                        
+                        var roleResult = await _userManager.AddToRoleAsync(user, selectedRole);
+                        if (!roleResult.Succeeded)
+                        {
+                            _logger.LogWarning($"No se pudo asignar el rol '{selectedRole}' al usuario.");
+                        }
+                    }
+
+                    TempData["Success"] = "¡Cuenta creada exitosamente! Bienvenido a Farmacia San José.";
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
@@ -107,6 +132,7 @@ namespace practica5web.Areas.Identity.Pages.Account
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogError($"Error de registro: {error.Description}");
                 }
             }
 

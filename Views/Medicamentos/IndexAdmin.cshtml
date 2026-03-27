@@ -1,0 +1,173 @@
+@model IEnumerable<practica5PR.Models.Medicamento>
+
+@{
+    ViewData["Title"] = "Listado de Medicamentos";
+    var hoy = DateTime.Today;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="display-6 fw-bold mb-0 text-primary">Medicamentos</h1>
+        <p class="text-muted">Gestión de productos farmacéuticos y stock.</p>
+    </div>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+    {
+        <a asp-action="Create" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo Medicamento
+        </a>
+    }
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body bg-light rounded shadow-sm">
+        <form asp-action="Index" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Buscar por Nombre</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control border-start-0" placeholder="Ej: Paracetamol..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold">Categoría</label>
+                <select name="categoriaId" class="form-select" asp-items="ViewBag.Categorias">
+                    <option value="">Todas las categorías</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold">Estante</label>
+                <select name="estanteId" class="form-select" asp-items="ViewBag.Estantes">
+                    <option value="">Todos los estantes</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="d-grid gap-2 d-flex">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-filter"></i> Filtrar
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary" title="Limpiar Filtros">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="ps-4" style="width: 80px;">Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Estante</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Stock</th>
+                        <th class="text-center">Vencimiento</th>
+                        <th class="text-center">Estado</th>
+                        <th class="pe-4 text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var diasParaVencer = (item.FechaVencimiento - hoy).TotalDays;
+                        bool esBajoStock = item.Stock <= 10;
+                        bool esVencido = diasParaVencer < 0;
+                        bool esPorVencer = diasParaVencer >= 0 && diasParaVencer <= 30;
+                        
+                        <tr>
+                            <td class="ps-4">
+                                @if (!string.IsNullOrEmpty(item.ImagenUrl))
+                                {
+                                    <img src="@item.ImagenUrl" alt="@item.Nombre" class="rounded rounded-circle shadow-sm border" style="width: 45px; height: 45px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 45px; height: 45px;">
+                                        <i class="bi bi-image text-muted"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <span class="fw-bold text-dark">@item.Nombre</span>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">@item.Categoria?.Nombre</span></td>
+                            <td><i class="bi bi-archive me-1 text-muted"></i> @item.Estante?.Nombre</td>
+                            <td class="text-center fw-bold text-primary">Bs. @item.Precio.ToString("N2")</td>
+                            <td class="text-center">
+                                @if (esBajoStock)
+                                {
+                                    <span class="text-info fw-bold" title="Stock Bajo">
+                                        <i class="bi bi-circle-fill me-1" style="color: #0dcaf0;"></i> @item.Stock
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-dark">@item.Stock</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (esVencido)
+                                {
+                                    <span class="text-danger fw-bold" title="Vencido">
+                                        <i class="bi bi-circle-fill me-1"></i> @item.FechaVencimiento.ToString("dd/MM/yyyy")
+                                    </span>
+                                }
+                                else if (esPorVencer)
+                                {
+                                    <span class="text-warning fw-bold" title="Próximo a Vencer">
+                                        <i class="bi bi-circle-fill me-1"></i> @item.FechaVencimiento.ToString("dd/MM/yyyy")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-dark">@item.FechaVencimiento.ToString("dd/MM/yyyy")</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (item.Estado)
+                                {
+                                    <span class="badge bg-success-subtle text-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger">Inactivo</span>
+                                }
+                            </td>
+                            <td class="pe-4 text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info" title="Ver Detalles">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                            <button type="button" class="btn btn-outline-danger" title="Eliminar" onclick="confirmarEliminacion(event, '¿Eliminar medicamento?', 'Esta acción no se puede deshacer.')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 text-muted"></i>
+        <p class="mt-3 fs-5">No se encontraron medicamentos registrados.</p>
+    </div>
+}

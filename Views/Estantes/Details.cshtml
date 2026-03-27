@@ -1,5 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model practica5PR.Models.Estante
+
 @{
+    ViewData["Title"] = "Detalles del Estante";
 }
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Index">Estantes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detalles</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm border-0 mt-3 overflow-hidden">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-info-square me-2"></i>Detalles del Estante</h4>
+            </div>
+            <div class="card-body p-5">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center mb-4 mb-md-0">
+                        <i class="bi bi-door-closed display-1 text-primary"></i>
+                    </div>
+                    <div class="col-md-9">
+                        <label class="text-muted small text-uppercase fw-bold d-block">Identificador / Nombre</label>
+                        <h2 class="fw-bold mb-3">@Model.Nombre</h2>
+                        
+                        <label class="text-muted small text-uppercase fw-bold d-block">Ubicación Física</label>
+                        <p class="fs-5 fw-medium"><i class="bi bi-geo-alt text-primary me-2"></i>@Model.Ubicacion</p>
+                        
+                        <label class="text-muted small text-uppercase fw-bold d-block">Categoría / Notas</label>
+                        <p>@(string.IsNullOrEmpty(Model.Descripcion) ? "Sin descripción disponible." : Model.Descripcion)</p>
+                        
+                        <div class="mt-4 p-3 bg-light rounded d-inline-block border">
+                            <span class="fw-bold text-primary fs-5"><i class="bi bi-box-seam me-2"></i>@Model.Medicamentos.Count Medicamentos</span> actualmente en este estante.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white py-3 border-top">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">Volver</a>
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary px-4">
+                            <i class="bi bi-pencil me-1"></i> Editar
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -32,6 +32,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
+.AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
+.AddDefaultUI()
 .AddDefaultTokenProviders();
 
 // MVC

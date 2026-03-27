@@ -1,5 +1,263 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model practica5PR.Models.ViewModels.InventarioViewModel
+
 @{
+    ViewData["Title"] = "Control de Inventario";
 }
+
+<div class="mb-4">
+    <h1 class="display-6 fw-bold mb-0 text-primary">Control de Inventario</h1>
+    <p class="text-muted">Estado crítico de productos: vencimiento y stock bajo.</p>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card dashboard-card vencidos h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-calendar-x text-danger fs-1 me-3"></i>
+                    <div>
+                        <h6 class="text-muted mb-0">Vencidos</h6>
+                        <h2 class="fw-bold mb-0 text-danger">@Model.Vencidos.Count</h2>
+                    </div>
+                </div>
+                <p class="small text-muted mb-0">Productos que ya no se pueden vender.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card dashboard-card por-vencer h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-clock-history text-warning fs-1 me-3"></i>
+                    <div>
+                        <h6 class="text-muted mb-0">Próx. 30 días</h6>
+                        <h2 class="fw-bold mb-0 text-warning">@Model.PorVencer30Dias.Count</h2>
+                    </div>
+                </div>
+                <p class="small text-muted mb-0">Urgente rotar antes del vencimiento.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card dashboard-card bajo-stock h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-box-seam text-info fs-1 me-3"></i>
+                    <div>
+                        <h6 class="text-muted mb-0">Stock Bajo</h6>
+                        <h2 class="fw-bold mb-0 text-info">@Model.BajoStock.Count</h2>
+                    </div>
+                </div>
+                <p class="small text-muted mb-0">Reponer stock a la brevedad.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card h-100 shadow-sm border-0 bg-light">
+            <div class="card-body d-flex flex-column justify-content-center">
+                <a asp-controller="Reportes" asp-action="InventarioCompleto" class="btn btn-primary mb-2 shadow-sm">
+                    <i class="bi bi-file-earmark-bar-graph me-1"></i> Ver Reportes
+                </a>
+                <a asp-controller="Medicamentos" asp-action="Index" class="btn btn-outline-primary">
+                    <i class="bi bi-list-check me-1"></i> Ver Catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tablas de Estado Crítico -->
+<ul class="nav nav-pills mb-4" id="inventoryTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active me-2" id="vencidos-tab" data-bs-toggle="pill" data-bs-target="#vencidos" type="button" role="tab">
+            <i class="bi bi-calendar-x me-1"></i> Vencidos (@Model.Vencidos.Count)
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link me-2" id="stock-tab" data-bs-toggle="pill" data-bs-target="#stock" type="button" role="tab">
+            <i class="bi bi-box-seam me-1"></i> Stock Bajo (@Model.BajoStock.Count)
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="proximos-tab" data-bs-toggle="pill" data-bs-target="#proximos" type="button" role="tab">
+            <i class="bi bi-clock-history me-1"></i> Por Vencer (@(Model.PorVencer30Dias.Count + Model.PorVencer60Dias.Count + Model.PorVencer90Dias.Count))
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content card border-0 shadow-sm overflow-hidden" id="inventoryTabsContent">
+    <!-- Vencidos -->
+    <div class="tab-pane fade show active" id="vencidos" role="tabpanel">
+        @if (Model.Vencidos.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-danger-subtle">
+                        <tr>
+                            <th class="ps-4" style="width: 60px;"></th>
+                            <th>Medicamento</th>
+                            <th>Ubicación</th>
+                            <th class="text-center">Vencimiento</th>
+                            <th class="pe-4 text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Vencidos)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "/images/placeholder.png" : item.ImagenUrl)" 
+                                         onerror="this.src='/images/no-image.png'"
+                                         class="rounded-circle border shadow-sm" style="width: 35px; height: 35px; object-fit: cover;" />
+                                </td>
+                                <td class="fw-bold text-danger">@item.Nombre</td>
+                                <td>@item.Estante?.Nombre (@item.Estante?.Ubicacion)</td>
+                                <td class="text-center text-danger">@item.FechaVencimiento.ToString("dd/MM/yyyy")</td>
+                                <td class="pe-4 text-end">
+                                @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+                                {
+                                    <a asp-controller="Medicamentos" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Retirar</a>
+                                }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-check-circle text-success display-4 d-block mb-3"></i>
+                No hay productos vencidos en el inventario.
+            </div>
+        }
+    </div>
+
+    <!-- Stock Bajo -->
+    <div class="tab-pane fade" id="stock" role="tabpanel">
+        @if (Model.BajoStock.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-info-subtle">
+                        <tr>
+                            <th class="ps-4" style="width: 60px;"></th>
+                            <th>Medicamento</th>
+                            <th class="text-center">Stock Actual</th>
+                            <th>Ubicación</th>
+                            <th class="pe-4 text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BajoStock)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "/images/placeholder.png" : item.ImagenUrl)" 
+                                         onerror="this.src='/images/no-image.png'"
+                                         class="rounded-circle border shadow-sm" style="width: 35px; height: 35px; object-fit: cover;" />
+                                </td>
+                                <td class="fw-bold">@item.Nombre</td>
+                                <td class="text-center">
+                                    <span class="badge bg-danger fs-6">@item.Stock</span>
+                                </td>
+                                <td>@item.Estante?.Nombre</td>
+                                <td class="pe-4 text-end">
+                                @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+                                {
+                                    <a asp-controller="Medicamentos" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Pedir Reposición</a>
+                                }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-check-circle text-success display-4 d-block mb-3"></i>
+                Todos los productos tienen stock suficiente.
+            </div>
+        }
+    </div>
+
+    <!-- Por Vencer -->
+    <div class="tab-pane fade" id="proximos" role="tabpanel">
+        @{
+            var proximos = Model.PorVencer30Dias.Concat(Model.PorVencer60Dias).Concat(Model.PorVencer90Dias).Distinct();
+        }
+        @if (proximos.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-warning-subtle">
+                        <tr>
+                            <th class="ps-4" style="width: 60px;"></th>
+                            <th>Medicamento</th>
+                            <th class="text-center">Vencimiento</th>
+                            <th class="text-center">Días Restantes</th>
+                            <th class="pe-4 text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in proximos)
+                        {
+                            var dias = (int)(item.FechaVencimiento - DateTime.Today).TotalDays;
+                            <tr>
+                                <td class="ps-4">
+                                    <img src="@(string.IsNullOrEmpty(item.ImagenUrl) ? "/images/placeholder.png" : item.ImagenUrl)" 
+                                         onerror="this.src='/images/no-image.png'"
+                                         class="rounded-circle border shadow-sm" style="width: 35px; height: 35px; object-fit: cover;" />
+                                </td>
+                                <td class="fw-bold">@item.Nombre</td>
+                                <td class="text-center">@item.FechaVencimiento.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">
+                                    @if (dias <= 30)
+                                    {
+                                        <span class="badge bg-danger fs-6 shadow-sm">
+                                            <i class="bi bi-exclamation-triangle-fill me-1"></i> @dias días (Crítico)
+                                        </span>
+                                    }
+                                    else if (dias <= 60)
+                                    {
+                                        <span class="badge bg-warning text-dark fs-6 shadow-sm">
+                                            <i class="bi bi-clock-fill me-1"></i> @dias días (Precaución)
+                                        </span>
+                                    }
+                                    else if (dias <= 90)
+                                    {
+                                        <span class="badge bg-info text-white fs-6 shadow-sm">
+                                            <i class="bi bi-info-circle-fill me-1"></i> @dias días (Seguimiento)
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-dark fs-6 border">
+                                            @dias días
+                                        </span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+                                {
+                                    <a asp-controller="Medicamentos" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Ofertar</a>
+                                }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="p-5 text-center text-muted">
+                <i class="bi bi-check-circle text-success display-4 d-block mb-3"></i>
+                No hay productos próximos a vencer en el corto plazo.
+            </div>
+        }
+    </div>
+</div>

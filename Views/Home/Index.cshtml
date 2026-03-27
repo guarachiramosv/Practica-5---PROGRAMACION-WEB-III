@@ -1,8 +1,67 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Página de Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <h1 class="display-3 fw-bold text-primary mb-4">Gestión Eficiente <br /><span class="text-dark">para su Farmacia</span></h1>
+            <p class="lead text-muted mb-5">
+                Optimice el control de su inventario, supervise fechas de vencimiento en tiempo real y organice sus productos con precisión profesional. Un sistema diseñado para farmacias modernas.
+            </p>
+            <div class="d-grid gap-3 d-md-flex">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary btn-lg px-5 shadow-sm">
+                        <i class="bi bi-speedometer2 me-2"></i> Ir al Panel de Control
+                    </a>
+                }
+                else
+                {
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg px-5 shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-primary btn-lg px-5">
+                        Registrarse
+                    </a>
+                }
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div class="position-relative">
+                <i class="bi bi-capsule-pill text-primary opacity-10 position-absolute top-50 start-50 translate-middle" style="font-size: 20rem; z-index: -1;"></i>
+                <div class="card border-0 shadow-lg p-3 bg-white rounded-4 overflow-hidden mx-auto" style="max-width: 450px;">
+                    <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top rounded-3" alt="Pharmacy System">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-1">Tecnología de Vanguardia</h5>
+                        <p class="text-muted small mb-0">Seguridad Identity y Bootstrap 5</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-5">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 text-center">
+            <i class="bi bi-shield-check text-success display-4 mb-3"></i>
+            <h5 class="fw-bold">Seguridad Avanzada</h5>
+            <p class="text-muted">Autenticación Identity con roles protegidos para Administrador y Farmacéutico.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 text-center">
+            <i class="bi bi-graph-up-arrow text-primary display-4 mb-3"></i>
+            <h5 class="fw-bold">Control de Stock</h5>
+            <p class="text-muted">Sistema de semáforo visual para reponer existencias y evitar faltantes.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-4 text-center">
+            <i class="bi bi-clock-history text-warning display-4 mb-3"></i>
+            <h5 class="fw-bold">Gestión de Vencimientos</h5>
+            <p class="text-muted">Alertas automáticas para productos próximos a vencer en 30, 60 y 90 días.</p>
+        </div>
+    </div>
 </div>

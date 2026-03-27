@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace practica5PR.Models
@@ -46,5 +46,8 @@ namespace practica5PR.Models
         public int EstanteId { get; set; }
 
         public Estante? Estante { get; set; }
+
+        [Display(Name = "Imagen")]
+        public string? ImagenUrl { get; set; }
     }
 }

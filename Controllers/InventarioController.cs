@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using practica5PR.Services.Interfaces;
+using practica5PR.Models.ViewModels;
 
 namespace practica5web.Controllers
 {

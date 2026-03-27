@@ -1,46 +1,204 @@
 @page
-@model practica5web.Areas.Identity.Pages.Account.RegisterModel
+@model RegisterModel
 @{
-    ViewData["Title"] = "Registro";
+    ViewData["Title"] = "Registro de Usuario";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="register-container">
+    <div class="register-card shadow-lg animate__animated animate__fadeIn">
+        <div class="register-header">
+            <div class="logo-wrapper mb-3">
+                <i class="bi bi-person-plus-fill fs-1 text-primary"></i>
+            </div>
+            <h2 class="fw-bold mb-1">@ViewData["Title"]</h2>
+            <p class="text-muted small">Crea tu cuenta para acceder a la farmacia</p>
+        </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Crear una nueva cuenta.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Nombre" class="form-control" autocomplete="given-name" aria-required="true" placeholder="Nombre" />
-                <label asp-for="Input.Nombre">Nombre</label>
-                <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="px-4 pb-4">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger p-2 small" role="alert"></div>
+
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <div class="form-input-group mb-3">
+                        <span class="input-icon"><i class="bi bi-person"></i></span>
+                        <input asp-for="Input.Nombre" class="form-control" autocomplete="given-name" aria-required="true" placeholder="Nombre" />
+                        <span asp-validation-for="Input.Nombre" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-input-group mb-3">
+                        <span class="input-icon"><i class="bi bi-person"></i></span>
+                        <input asp-for="Input.Apellido" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Apellido" />
+                        <span asp-validation-for="Input.Apellido" class="text-danger small"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Apellido" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Apellido" />
-                <label asp-for="Input.Apellido">Apellido</label>
-                <span asp-validation-for="Input.Apellido" class="text-danger"></span>
+
+            <div class="form-input-group mb-3">
+                <span class="input-icon"><i class="bi bi-envelope"></i></span>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nombre@ejemplo.com" />
+                <span asp-validation-for="Input.Email" class="text-danger small"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+            <div class="form-input-group mb-3">
+                <span class="input-icon"><i class="bi bi-lock"></i></span>
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Contraseña" />
+                <span asp-validation-for="Input.Password" class="text-danger small"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Contraseña</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+            <div class="form-input-group mb-3">
+                <span class="input-icon"><i class="bi bi-shield-check"></i></span>
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirmar Contraseña" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+            <div class="form-input-group mb-4">
+                <span class="input-icon"><i class="bi bi-person-badge"></i></span>
+                <select asp-for="Input.Role" class="form-select ps-5" style="height: 50px; border-radius: 12px; border: 1.5px solid #eaecf4; background-color: #fcfcfd;">
+                    <option value="">-- Seleccionar Rol para Pruebas --</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Farmaceutico">Farmacéutico</option>
+                    <option value="Cliente">Cliente</option>
+                </select>
+                <span asp-validation-for="Input.Role" class="text-danger small"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrarse</button>
+
+            <button id="registerSubmit" type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm register-btn">
+                <span>Registrarse Ahora</span>
+                <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+
+            <div class="mt-4 text-center">
+                <p class="small text-muted mb-0">¿Ya tienes una cuenta?</p>
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary text-decoration-none fw-bold small">Inicia Sesión aquí</a>
+            </div>
         </form>
     </div>
 </div>
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        --surface-color: #ffffff;
+        --border-radius: 16px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+        background-color: #f8f9fc;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .register-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 20px;
+    }
+
+    .register-card {
+        background: var(--surface-color);
+        border-radius: var(--border-radius);
+        width: 100%;
+        max-width: 500px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: var(--transition);
+    }
+
+    .register-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+
+    .register-header {
+        text-align: center;
+        padding: 40px 30px 20px;
+    }
+
+    .logo-wrapper {
+        display: inline-flex;
+        background: rgba(78, 115, 223, 0.1);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .register-card:hover .logo-wrapper {
+        background: rgba(78, 115, 223, 0.2);
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .form-input-group {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        color: #b7b9cc;
+        z-index: 10;
+        transition: var(--transition);
+    }
+
+    .register-card .form-control {
+        padding-left: 45px;
+        height: 50px;
+        border-radius: 12px;
+        border: 1.5px solid #eaecf4;
+        background-color: #fcfcfd;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+
+    .register-card .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 4px rgba(78, 115, 223, 0.1);
+        background-color: #fff;
+    }
+
+    .register-card .form-control:focus + .input-icon,
+    .register-card .form-control:not(:placeholder-shown) + .input-icon {
+        color: #4e73df;
+    }
+
+    .register-btn {
+        height: 50px;
+        border-radius: 12px;
+        background: var(--primary-gradient);
+        border: none;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .register-btn:hover {
+        opacity: 0.95;
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+    }
+
+    .register-btn:active {
+        transform: scale(0.98);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate__fadeIn {
+        animation: fadeIn 0.6s ease-out;
+    }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

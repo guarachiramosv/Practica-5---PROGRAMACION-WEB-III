@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model practica5PR.Models.Categoria
+
 @{
+    ViewData["Title"] = "Eliminar Categoría";
 }
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Index">Categorías</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm border-0 mt-3 border-top border-danger border-5">
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-exclamation-triangle text-danger display-1 mb-3"></i>
+                <h3 class="fw-bold">¿Eliminar Categoría?</h3>
+                <p class="text-muted fs-5 mb-4">
+                    Estás a punto de eliminar la categoría <strong>@Model.Nombre</strong>.<br />
+                    @if (Model.Medicamentos.Any())
+                    {
+                        <div class="alert alert-warning text-start">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Atención:</strong> Esta categoría tiene <strong>@Model.Medicamentos.Count</strong> medicamentos asociados. Asegúrate de moverlos o eliminarlos primero si el sistema lo requiere.
+                        </div>
+                    }
+                </p>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg shadow-sm" @(Model.Medicamentos.Any() ? "disabled" : "")>
+                            <i class="bi bi-trash me-1"></i> Confirmar Eliminación
+                        </button>
+                        <a asp-action="Index" class="btn btn-light border btn-lg">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

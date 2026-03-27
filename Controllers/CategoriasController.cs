@@ -6,7 +6,7 @@ using practica5PR.Models;
 
 namespace practica5web.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador,Farmaceutico")]
     public class CategoriasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,10 +16,14 @@ namespace practica5web.Controllers
             _context = context;
         }
 
-        // GET: Categorias
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categorias.ToListAsync());
+            var categorias = await _context.Categorias.Include(c => c.Medicamentos).ToListAsync();
+            if (User.IsInRole("Administrador"))
+            {
+                return View("IndexAdmin", categorias);
+            }
+            return View("IndexReadOnly", categorias);
         }
 
         // GET: Categorias/Details/5
@@ -35,6 +39,7 @@ namespace practica5web.Controllers
         }
 
         // GET: Categorias/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
@@ -43,18 +48,21 @@ namespace practica5web.Controllers
         // POST: Categorias/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion")] Categoria categoria)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(categoria);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Categoría creada correctamente.";
                 return RedirectToAction(nameof(Index));
             }
             return View(categoria);
         }
 
         // GET: Categorias/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -68,6 +76,7 @@ namespace practica5web.Controllers
         // POST: Categorias/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion")] Categoria categoria)
         {
             if (id != categoria.Id) return NotFound();
@@ -78,6 +87,7 @@ namespace practica5web.Controllers
                 {
                     _context.Update(categoria);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Categoría actualizada correctamente.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -90,6 +100,7 @@ namespace practica5web.Controllers
         }
 
         // GET: Categorias/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -104,6 +115,7 @@ namespace practica5web.Controllers
         // POST: Categorias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
@@ -111,6 +123,7 @@ namespace practica5web.Controllers
             {
                 _context.Categorias.Remove(categoria);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Categoría eliminada correctamente.";
             }
             return RedirectToAction(nameof(Index));
         }

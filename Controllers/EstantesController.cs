@@ -6,7 +6,7 @@ using practica5PR.Models;
 
 namespace practica5web.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize(Roles = "Administrador,Farmaceutico")]
     public class EstantesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,10 +16,14 @@ namespace practica5web.Controllers
             _context = context;
         }
 
-        // GET: Estantes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Estantes.ToListAsync());
+            var estantes = await _context.Estantes.Include(e => e.Medicamentos).ToListAsync();
+            if (User.IsInRole("Administrador"))
+            {
+                return View("IndexAdmin", estantes);
+            }
+            return View("IndexReadOnly", estantes);
         }
 
         // GET: Estantes/Details/5
@@ -35,6 +39,7 @@ namespace practica5web.Controllers
         }
 
         // GET: Estantes/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
@@ -43,18 +48,21 @@ namespace practica5web.Controllers
         // POST: Estantes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Ubicacion,Descripcion")] Estante estante)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(estante);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Estante creado correctamente.";
                 return RedirectToAction(nameof(Index));
             }
             return View(estante);
         }
 
         // GET: Estantes/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -68,6 +76,7 @@ namespace practica5web.Controllers
         // POST: Estantes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Ubicacion,Descripcion")] Estante estante)
         {
             if (id != estante.Id) return NotFound();
@@ -78,6 +87,7 @@ namespace practica5web.Controllers
                 {
                     _context.Update(estante);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Estante actualizado correctamente.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -90,6 +100,7 @@ namespace practica5web.Controllers
         }
 
         // GET: Estantes/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -104,6 +115,7 @@ namespace practica5web.Controllers
         // POST: Estantes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var estante = await _context.Estantes.FindAsync(id);
@@ -111,6 +123,7 @@ namespace practica5web.Controllers
             {
                 _context.Estantes.Remove(estante);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Estante eliminado correctamente.";
             }
             return RedirectToAction(nameof(Index));
         }

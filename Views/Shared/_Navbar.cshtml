@@ -1,5 +1,58 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-capsule me-2"></i>
+            <span>Farmacia San José</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                </li>
+                
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Farmaceutico"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Medicamentos" ? "active fw-bold" : "")" asp-controller="Medicamentos" asp-action="Index">
+                                <i class="bi bi-capsule-pill me-1"></i> Gestión de Medicamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Categorias" ? "active fw-bold" : "")" asp-controller="Categorias" asp-action="Index">Categorías</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Estantes" ? "active fw-bold" : "")" asp-controller="Estantes" asp-action="Index">Estantes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Inventario" ? "active fw-bold" : "")" asp-controller="Inventario" asp-action="Index">Inventario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Reportes" ? "active fw-bold" : "")" asp-controller="Reportes" asp-action="Index">Reportes</a>
+                        </li>
+                    }
+                else if (User.IsInRole("Cliente"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Medicamentos" ? "active fw-bold" : "")" asp-controller="Medicamentos" asp-action="Index">
+                            <i class="bi bi-search me-1"></i> Catálogo de Productos
+                        </a>
+                    </li>
+                }
+                }
+            </ul>
+            <partial name="_LoginPartial" />
+        </div>
+    </div>
+</nav>

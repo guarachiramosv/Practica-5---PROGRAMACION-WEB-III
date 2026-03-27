@@ -1,0 +1,42 @@
+@model IEnumerable<practica5PR.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorías de Medicamentos";
+}
+
+<div class="mb-4">
+    <h1 class="display-6 fw-bold mb-0 text-primary">Categorías</h1>
+    <p class="text-muted">Listado de categorías registradas en el sistema.</p>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Nombre</th>
+                        <th>Descripción</th>
+                        <th class="text-center">Total Medicamentos</th>
+                        <th class="pe-4 text-end">Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-medium">@item.Nombre</td>
+                            <td>@(string.IsNullOrEmpty(item.Descripcion) ? "-" : item.Descripcion)</td>
+                            <td class="text-center">@item.Medicamentos.Count</td>
+                            <td class="pe-4 text-end">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

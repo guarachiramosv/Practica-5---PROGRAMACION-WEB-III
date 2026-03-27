@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using practica5web.Models;
 
 namespace practica5web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,6 +17,21 @@ namespace practica5web.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                if (User.IsInRole("Administrador"))
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                if (User.IsInRole("Farmaceutico"))
+                {
+                    return RedirectToAction("Index", "Inventario");
+                }
+                if (User.IsInRole("Cliente"))
+                {
+                    return RedirectToAction("Index", "Medicamentos");
+                }
+            }
             return View();
         }
 

@@ -1,0 +1,110 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="login-container">
+    <div class="login-card shadow-lg animate__animated animate__fadeIn">
+        <div class="login-header text-center p-4">
+            <div class="logo-wrapper mb-3">
+                <i class="bi bi-shield-lock-fill fs-1 text-primary"></i>
+            </div>
+            <h2 class="fw-bold mb-1">@ViewData["Title"]</h2>
+            <p class="text-muted small">Ingresa tus credenciales para continuar</p>
+        </div>
+
+        <form id="account" method="post" class="px-4 pb-4">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger p-2 small" role="alert"></div>
+
+            <div class="form-input-group mb-3">
+                <span class="input-icon"><i class="bi bi-envelope"></i></span>
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nombre@ejemplo.com" />
+                <span asp-validation-for="Input.Email" class="text-danger small"></span>
+            </div>
+
+            <div class="form-input-group mb-3">
+                <span class="input-icon"><i class="bi bi-lock"></i></span>
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Contraseña" />
+                <span asp-validation-for="Input.Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label small text-muted" asp-for="Input.RememberMe">Recordarme</label>
+                </div>
+            </div>
+
+            <button id="login-submit" type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm login-btn">
+                <span>Acceder al Sistema</span>
+                <i class="bi bi-box-arrow-in-right ms-2"></i>
+            </button>
+
+            <div class="mt-4 text-center">
+                <p class="small text-muted mb-0">¿No tienes una cuenta todavía?</p>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary text-decoration-none fw-bold small">Regístrate gratis aquí</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 20px;
+    }
+    .login-card {
+        background: #fff;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 450px;
+        overflow: hidden;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+    }
+    .logo-wrapper {
+        display: inline-flex;
+        background: rgba(78, 115, 223, 0.1);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+    }
+    .form-input-group {
+        position: relative;
+    }
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        color: #b7b9cc;
+        z-index: 10;
+    }
+    .login-card .form-control {
+        padding-left: 45px;
+        height: 50px;
+        border-radius: 12px;
+        border: 1.5px solid #eaecf4;
+        background-color: #fcfcfd;
+    }
+    .login-btn {
+        height: 50px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        border: none;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

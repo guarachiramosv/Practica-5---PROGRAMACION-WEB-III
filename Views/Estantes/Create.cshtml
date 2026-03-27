@@ -1,5 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model practica5PR.Models.Estante
+
 @{
+    ViewData["Title"] = "Nuevo Estante";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="Index">Estantes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nuevo</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm border-0 mt-3">
+            <div class="card-header bg-white py-3">
+                <h4 class="mb-0 fw-bold text-primary"><i class="bi bi-plus-square me-2"></i>Registrar Nuevo Estante</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label fw-semibold"></label>
+                        <input asp-for="Nombre" class="form-control" placeholder="Ej: A1, B2, Refrigerados" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Ubicacion" class="form-label fw-semibold"></label>
+                        <input asp-for="Ubicacion" class="form-control" placeholder="Ej: Pasillo 1, Fila 3" />
+                        <span asp-validation-for="Ubicacion" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Descripcion" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="3" placeholder="Notas sobre el estante..."></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a asp-action="Index" class="btn btn-light px-4 border">Cancelar</a>
+                        <button type="submit" class="btn btn-primary px-5">Guardar Estante</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Centro de Reportes";
+}
+
+<div class="mb-4">
+    <h1 class="display-6 fw-bold mb-0 text-primary">Centro de Reportes</h1>
+    <p class="text-muted">Seleccione el tipo de reporte que desea generar.</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-danger-subtle p-3 rounded-circle me-3">
+                        <i class="bi bi-calendar-x text-danger fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Reporte de Vencidos</h5>
+                        <small class="text-muted">Productos con fecha expirada</small>
+                    </div>
+                </div>
+                <p class="text-muted small">Muestra todos los medicamentos cuya fecha de vencimiento es anterior al día de hoy. Estos productos deben ser retirados inmediatamente.</p>
+                <a asp-action="Vencidos" class="btn btn-outline-danger w-100">Generar Reporte</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-warning-subtle p-3 rounded-circle me-3">
+                        <i class="bi bi-clock-history text-warning fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Próximos a Vencer</h5>
+                        <small class="text-muted">Alertas a 30 días</small>
+                    </div>
+                </div>
+                <p class="text-muted small">Identifica los productos que vencerán en los próximos 30 días para priorizar su rotación o lanzar ofertas especiales.</p>
+                <a asp-action="PorVencer" class="btn btn-outline-warning w-100 text-dark">Generar Reporte</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-info-subtle p-3 rounded-circle me-3">
+                        <i class="bi bi-box-seam text-info fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Bajo Stock</h5>
+                        <small class="text-muted">Productos por agotar</small>
+                    </div>
+                </div>
+                <p class="text-muted small">Lista de medicamentos con 10 unidades o menos. Útil para coordinar pedidos de reposición con proveedores.</p>
+                <a asp-action="BajoStock" class="btn btn-outline-info w-100">Generar Reporte</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary-subtle p-3 rounded-circle me-3">
+                        <i class="bi bi-file-earmark-bar-graph text-primary fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Inventario Completo</h5>
+                        <small class="text-muted">Resumen total</small>
+                    </div>
+                </div>
+                <p class="text-muted small">Un vistazo general de todos los productos agrupados por estado crítico (Vencidos, Por vencer y Bajo Stock).</p>
+                <a asp-action="InventarioCompleto" class="btn btn-outline-primary w-100">Generar Reporte</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .transition { transition: all 0.3s ease; }
+    .hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important; }
+</style>
